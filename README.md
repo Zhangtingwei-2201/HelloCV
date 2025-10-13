@@ -21,3 +21,14 @@ OpenCV版本: 4.5.x
 4通过apt包管理器直接安装OpenCV
 5安装Vscode主程序,并ROS2开发扩展配置
 6本地Git环境初始化配置，SSH密钥对生成与GitHub绑定，远程仓库与本地关联。
+五.使用方法：
+1编写代码：
+C++开发：进入 C++ 源文件目录cd HelloCV/src/cpp
+创建新的 C++ 文件touch my_opencv_node.cpp
+2编译代码
+编译单个 C++ 文件
+g++ -std=c++17 src/cpp/my_opencv_node.cpp -o build/my_node \
+    `pkg-config --cflags --libs opencv4`
+3运行
+运行编译后的可执行文件./build/my_node
+或者作为 ROS2 节点运行ros2 run hello_cv my_cpp_node
