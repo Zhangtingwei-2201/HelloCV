@@ -1,0 +1,304 @@
+//Crypto.h中代码
+
+#ifndef CRYPTO_H
+#define CRYPTO_H
+
+#include <string>
+
+// 加密解密类 - 负责加密和解密逻辑
+class Crypto {
+public:
+    // 加密函数
+    static std::string encrypt(const std::string& text, int key);
+    
+    // 解密函数
+    static std::string decrypt(const std::string& text, int key);
+};
+
+#endif
+
+
+
+
+
+//Crypto.cpp中代码
+
+#include "Crypto.h"
+#include <cctype>  // 用于字符类型判断函数
+
+// 凯撒密码加密实现
+std::string Crypto::encrypt(const std::string& text, int key) {
+    std::string result = "";  // 存储加密结果
+    
+    // 遍历字符串中的每个字符
+    for (char c : text) {
+        // 如果是字母，进行加密
+        if (isalpha(c)) {
+            // 判断是小写字母还是大写字母
+            char base = islower(c) ? 'a' : 'A';
+            // 凯撒密码算法：移动key个位置
+            c = (c - base + key) % 26 + base;
+        }
+        // 非字母字符保持不变，直接添加到结果中
+        result += c;
+    }
+    
+    return result;
+}
+
+// 凯撒密码解密实现
+std::string Crypto::decrypt(const std::string& text, int key) {
+    // 解密就是反向加密（移动26-key个位置）
+    return encrypt(text, 26 - (key % 26));
+}
+
+
+
+
+//FileHandler.h中代码
+
+#ifndef FILEHANDLER_H
+#define FILEHANDLER_H
+
+#include <string>
+
+// 文件处理类 - 负责文件的读取和保存
+class FileHandler {
+public:
+    // 读取文件内容
+    static bool readFile(const std::string& filePath, std::string& content);
+    
+    // 写入文件内容
+    static bool writeFile(const std::string& filePath, const std::string& content);
+};
+
+#endif
+
+
+
+
+
+//FileHandler.cpp中代码
+
+#include "FileHandler.h"
+#include <fstream>  // 文件流操作
+#include <iostream> // 输入输出
+
+// 读取文件内容
+bool FileHandler::readFile(const std::string& filePath, std::string& content) {
+    // 创建输入文件流
+    std::ifstream file(filePath);
+    
+    // 检查文件是否成功打开
+    if (!file.is_open()) {
+        std::cout << "错误：无法打开文件 " << filePath << std::endl;
+        return false;
+    }
+    
+    // 读取文件全部内容
+    content.assign((std::istreambuf_iterator<char>(file)), 
+                   std::istreambuf_iterator<char>());
+    
+    // 关闭文件
+    file.close();
+    return true;
+}
+
+// 写入文件内容
+bool FileHandler::writeFile(const std::string& filePath, const std::string& content) {
+    // 创建输出文件流
+    std::ofstream file(filePath);
+    
+    // 检查文件是否成功创建
+    if (!file.is_open()) {
+        std::cout << "错误：无法创建文件 " << filePath << std::endl;
+        return false;
+    }
+    
+    // 写入内容到文件
+    file << content;
+    
+    // 关闭文件
+    file.close();
+    return true;
+}
+
+
+
+
+
+//Menu.h中代码
+
+#ifndef MENU_H
+#define MENU_H
+
+// 菜单类 - 负责显示命令行菜单并处理用户输入
+class Menu {
+public:
+    // 运行菜单主循环
+    void run();
+    
+private:
+    // 显示主菜单
+    void showMainMenu();
+    
+    // 处理文本加密
+    void handleTextEncryption();
+    
+    // 处理文本解密
+    void handleTextDecryption();
+    
+    // 处理文件加密
+    void handleFileEncryption();
+    
+    // 处理文件解密
+    void handleFileDecryption();
+    
+    // 获取用户输入的密钥
+    int getKey();
+};
+
+#endif
+
+
+
+
+
+//Menu.cpp中代码
+
+#include "Menu.h"
+#include "Crypto.h"
+#include "FileHandler.h"
+#include <iostream>
+#include <string>
+
+// 显示主菜单
+void Menu::showMainMenu() {
+    std::cout << "\n=== 简易加密解密工具 ===" << std::endl;
+    std::cout << "1. 文本加密" << std::endl;
+    std::cout << "2. 文本解密" << std::endl;
+    std::cout << "3. 文件加密" << std::endl;
+    std::cout << "4. 文件解密" << std::endl;
+    std::cout << "5. 退出" << std::endl;
+    std::cout << "请选择操作: ";
+}
+
+// 获取用户输入的密钥
+int Menu::getKey() {
+    int key;
+    std::cout << "请输入密钥(整数): ";
+    std::cin >> key;
+    std::cin.ignore(); // 清除输入缓冲区中的换行符
+    return key;
+}
+
+// 处理文本加密
+void Menu::handleTextEncryption() {
+    std::string text;
+    std::cout << "请输入要加密的文本: ";
+    std::getline(std::cin, text);
+    
+    int key = getKey();
+    std::string encrypted = Crypto::encrypt(text, key);
+    std::cout << "加密结果: " << encrypted << std::endl;
+}
+
+// 处理文本解密
+void Menu::handleTextDecryption() {
+    std::string text;
+    std::cout << "请输入要解密的文本: ";
+    std::getline(std::cin, text);
+    
+    int key = getKey();
+    std::string decrypted = Crypto::decrypt(text, key);
+    std::cout << "解密结果: " << decrypted << std::endl;
+}
+
+// 处理文件加密
+void Menu::handleFileEncryption() {
+    std::string inputFile, outputFile;
+    std::cout << "请输入要加密的文件路径: ";
+    std::getline(std::cin, inputFile);
+    std::cout << "请输入输出文件路径: ";
+    std::getline(std::cin, outputFile);
+    
+    int key = getKey();
+    
+    std::string content;
+    if (FileHandler::readFile(inputFile, content)) {
+        std::string encrypted = Crypto::encrypt(content, key);
+        if (FileHandler::writeFile(outputFile, encrypted)) {
+            std::cout << "文件加密完成! 结果保存在: " << outputFile << std::endl;
+        }
+    }
+}
+
+// 处理文件解密
+void Menu::handleFileDecryption() {
+    std::string inputFile, outputFile;
+    std::cout << "请输入要解密的文件路径: ";
+    std::getline(std::cin, inputFile);
+    std::cout << "请输入输出文件路径: ";
+    std::getline(std::cin, outputFile);
+    
+    int key = getKey();
+    
+    std::string content;
+    if (FileHandler::readFile(inputFile, content)) {
+        std::string decrypted = Crypto::decrypt(content, key);
+        if (FileHandler::writeFile(outputFile, decrypted)) {
+            std::cout << "文件解密完成! 结果保存在: " << outputFile << std::endl;
+        }
+    }
+}
+
+// 运行菜单主循环
+void Menu::run() {
+    int choice;
+    
+    do {
+        showMainMenu();
+        std::cin >> choice;
+        std::cin.ignore(); // 清除输入缓冲区
+        
+        // 根据用户选择执行相应操作
+        switch (choice) {
+            case 1:
+                handleTextEncryption();
+                break;
+            case 2:
+                handleTextDecryption();
+                break;
+            case 3:
+                handleFileEncryption();
+                break;
+            case 4:
+                handleFileDecryption();
+                break;
+            case 5:
+                std::cout << "再见!" << std::endl;
+                break;
+            default:
+                std::cout << "无效选择，请重新输入!" << std::endl;
+        }
+    } while (choice != 5); // 当用户选择5时退出循环
+}
+
+
+
+
+
+//main.cpp中代码
+
+#include "Menu.h"
+
+// 程序主函数
+int main() {
+    // 创建菜单对象
+    Menu menu;
+    
+    // 运行菜单
+    menu.run();
+    
+    return 0;
+}
