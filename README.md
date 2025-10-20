@@ -15,11 +15,7 @@
 - CMake 3.10 或更高版本
 - C++11 兼容的编译器
 #### 编译步骤
-1. 克隆仓库
-```bash
-git clone https://github.com/你的用户名/CryptoTool.git
-cd CryptoTool
-```
+1. 克隆仓库内代码
 2. 创建构建目录并编译
 ```bash
 mkdir build
