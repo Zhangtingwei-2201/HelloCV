@@ -1,0 +1,16 @@
+# 设置CMake最低版本要求
+cmake_minimum_required(VERSION 3.10)
+
+# 定义项目名称
+project(CryptoTool)
+
+# 设置C++标准为C++11
+set(CMAKE_CXX_STANDARD 11)
+
+# 创建可执行文件，链接所有源文件
+add_executable(CryptoTool 
+    main.cpp 
+    Crypto.cpp 
+    FileHandler.cpp 
+    Menu.cpp
+)
