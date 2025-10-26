@@ -11,3 +11,8 @@ https://www.yuque.com/waitingz/ze3za5/ca217102b27se6dy?singleDoc# 《Docker学�
 https://www.yuque.com/waitingz/ze3za5/tcrm2nstcyve2isq?singleDoc# 《CMake学习笔记》
 
 https://www.yuque.com/waitingz/ze3za5/gl02w55owfrxiqzh?singleDoc# 《文本加密解密》
+
+##第三周
+https://www.yuque.com/waitingz/ze3za5/kt0i5gduug187xfi?singleDoc# 《Opencv学习笔记》
+
+https://www.yuque.com/waitingz/ze3za5/vkipo99pq7x9a7yz?singleDoc# 《Opencv交通信号灯检测》
